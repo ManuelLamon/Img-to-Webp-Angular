@@ -1,0 +1,7 @@
+{
+  "name": "webpTransformer",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

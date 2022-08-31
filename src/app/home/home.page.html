@@ -1,0 +1,79 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Image to Webp
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Blank</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-grid>
+    <ion-row class="justify-content-center ">
+      <ion-col size="12" size-md="8">
+        <ngx-file-drop dropZoneLabel="Drop files here" dropZoneClassName="ngx-file-drop__drop-zone border-success" (onFileDrop)="dropped($event)" 
+          (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)">
+              <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
+                <button type="button" class=" bg-transparent" (click)="openFileSelector()">Browse Files</button>
+              </ng-template>
+          </ngx-file-drop>
+      </ion-col>
+    </ion-row>
+    <ion-row class="justify-content-center mt-5">
+      <ion-col size="12" size-md="8">
+        <div class="btn-group">
+          <button class="btn btn-success" [disabled]="loading != 1" (click)="downloadAll()"> Dowload All <ion-icon name="archive-outline"></ion-icon></button>
+          <button class="btn btn-primary" (click)="refresh()"> Refresh <ion-icon name="reload-outline"></ion-icon></button>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row class="justify-content-center">
+      <ion-col size="12" size-md="8">
+        <div class="center">
+          <div class="upload-table ">
+            <ion-progress-bar [value]="loading" color="success"></ion-progress-bar> 
+            <ngx-datatable 
+            class="material"
+            [headerHeight]="50"
+            [limit]="5"
+            [footerHeight]="50"
+            rowHeight="auto"
+            [columnMode]="'force'"
+            [rows]="filesData"
+            > 
+
+            <ngx-datatable-column name="Name">
+              <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row">
+                {{row.relativePath}}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Size">
+              <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row" let-value="value">
+                {{row.size}}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Download">
+              <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row" let-value="value">
+                  <button *ngIf="!row.loading" class="btn btn-success" (click)="download(rowIndex)"> Download <ion-icon name="download-outline"></ion-icon> </button>
+                  <div *ngIf="row.loading" class="spinner-border text-success " role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+              </ng-template>
+            </ngx-datatable-column>
+            
+            
+          
+          </ngx-datatable>
+          </div>
+      </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  
+</ion-content>
