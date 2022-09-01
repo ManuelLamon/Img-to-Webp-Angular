@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
-import { NgxFileDropEntry, FileSystemFileEntry, FileSystemDirectoryEntry } from 'ngx-file-drop';
+import {
+  NgxFileDropEntry,
+  FileSystemFileEntry,
+  FileSystemDirectoryEntry,
+} from 'ngx-file-drop';
 import { filesData } from 'src/models';
 import { ImgTransformerServiceService } from '../services/img-transformer-service.service';
 
@@ -8,40 +12,45 @@ import { ImgTransformerServiceService } from '../services/img-transformer-servic
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
+
 export class HomePage {
-  
   files: NgxFileDropEntry[] = [];
   filesData: filesData[] = [];
-  loading:number = 0
-  counter:number = 0
-  
-  constructor(public imageTransform:ImgTransformerServiceService) {}
-  
+  loading = 0;
+  counter = 0;
+
+  constructor(public imageTransform: ImgTransformerServiceService) {}
+
   public dropped(files: NgxFileDropEntry[]) {
     this.files = files;
-    console.log(files)
-    for (const [Index,droppedFile] of files.entries()) { 
+    console.log(files);
+    for (const [index, droppedFile] of files.entries()) {
       if (droppedFile.fileEntry.isFile) {
         const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
-        
+
         fileEntry.file((file: File) => {
+          this.filesData = [
+            ...this.filesData,
+            {
+              relativePath: droppedFile.relativePath.split('.')[0],
+              size: `${Math.round(file.size / 1024)}KB`,
+              loading: true,
+              image: '',
+            },
+          ];
 
-          this.filesData =[...this.filesData,{relativePath:droppedFile.relativePath.split('.')[0],size:`${Math.round((file.size / 1024))}KB`,loading:true,image:''}]
-
-          this.imageTransform.transformImage(file)
-          .then(
-            (res:any) => {
-              this.counter++
-              this.loading = this.counter/this.filesData.length
-              let elFile = this.filesData.find((data,i)=>i == Index)
-              elFile.loading = false
-              elFile.image = res
-            }
-          )
-          .catch(error =>{
-            console.log(error)
-          })
-
+          this.imageTransform
+            .transformImage(file)
+            .then((res: any) => {
+              this.counter++;
+              this.loading = this.counter / this.filesData.length;
+              const elFile = this.filesData.find((data, i) => i === index);
+              elFile.loading = false;
+              elFile.image = res;
+            })
+            .catch((error) => {
+              console.log(error);
+            });
         });
       } else {
         // It was a directory (empty directories are added, otherwise only files)
@@ -51,40 +60,39 @@ export class HomePage {
     }
   }
 
-  public fileOver(event){
+  public fileOver(event) {
     console.log(event);
   }
 
-  public fileLeave(event){
+  public fileLeave(event) {
     console.log(event);
   }
-  download(rowIndex:number){
-    console.log(this.filesData[rowIndex].image)
-    var el = document.createElement("a");
-    el.setAttribute("href", this.filesData[rowIndex].image);
-    el.setAttribute("download", this.filesData[rowIndex].relativePath);
+
+  download(rowIndex: number) {
+    console.log(this.filesData[rowIndex].image);
+    const el = document.createElement('a');
+    el.setAttribute('href', this.filesData[rowIndex].image);
+    el.setAttribute('download', this.filesData[rowIndex].relativePath);
     document.body.appendChild(el);
     el.click();
     el.remove();
-    return
+    return;
   }
-  refresh(){
+
+  refresh() {
     this.files = [];
     this.filesData = [];
-    this.loading = 0
-    this.counter = 0
+    this.loading = 0;
+    this.counter = 0;
   }
-  async downloadAll(){
-    for (const img of this.filesData) {
 
-      if(img.loading){
-        return alert('Hay productos cargando')
+  async downloadAll() {
+    for (const img of this.filesData) {
+      if (img.loading) {
+        return alert('Hay productos cargando');
       }
-      
     }
 
-    this.imageTransform.downloadZip(this.filesData)
-
+    this.imageTransform.downloadZip(this.filesData);
   }
-
 }

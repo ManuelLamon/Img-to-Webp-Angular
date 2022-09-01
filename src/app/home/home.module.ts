@@ -8,7 +8,6 @@ import { HomePageRoutingModule } from './home-routing.module';
 import { NgxFileDropModule } from 'ngx-file-drop';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
-
 @NgModule({
   imports: [
     CommonModule,
@@ -16,8 +15,8 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
     IonicModule,
     HomePageRoutingModule,
     NgxFileDropModule,
-    NgxDatatableModule
+    NgxDatatableModule,
   ],
-  declarations: [HomePage]
+  declarations: [HomePage],
 })
 export class HomePageModule {}

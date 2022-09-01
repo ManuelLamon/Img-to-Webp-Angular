@@ -27,7 +27,7 @@
     <ion-row class="justify-content-center mt-5">
       <ion-col size="12" size-md="8">
         <div class="btn-group">
-          <button class="btn btn-success" [disabled]="loading != 1" (click)="downloadAll()"> Dowload All <ion-icon name="archive-outline"></ion-icon></button>
+          <button class="btn btn-success" [disabled]="loading !== 1" (click)="downloadAll()"> Dowload All <ion-icon name="archive-outline"></ion-icon></button>
           <button class="btn btn-primary" (click)="refresh()"> Refresh <ion-icon name="reload-outline"></ion-icon></button>
         </div>
       </ion-col>
